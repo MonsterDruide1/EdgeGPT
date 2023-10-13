@@ -3,6 +3,7 @@ import json
 import os
 import ssl
 import sys
+import urllib.parse
 from time import time
 from typing import Generator
 from typing import List
@@ -105,7 +106,7 @@ class ChatHub:
         self.aio_session = aiohttp.ClientSession(cookies=cookies)
         # Check if websocket is closed
         wss = await self.aio_session.ws_connect(
-            wss_link or "wss://sydney.bing.com/sydney/ChatHub",
+            (wss_link or "wss://sydney.bing.com/sydney/ChatHub")+"?sec_access_token="+urllib.parse.quote_plus(self.request.conversation_signature),
             ssl=ssl_context,
             headers=HEADERS,
             proxy=self.proxy,
